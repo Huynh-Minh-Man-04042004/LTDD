@@ -1,6 +1,0 @@
-<!-- res/drawable/bg_message_right.xml -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="#0084FF"/> <!-- màu xanh đậm giống Facebook -->
-    <corners android:radius="16dp"/>
-</shape>
