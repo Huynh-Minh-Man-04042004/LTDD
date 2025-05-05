@@ -55,14 +55,14 @@ public class AuthService {
             }
 
             if (isOtpRecentlySent(email)) {
-                return "Tài khoản đã tồn tại nhưng chưa xác minh. Vui lòng đợi 1 phút để gửi lại mã OTP.";
+                return "Tài khoản đã tồn tại nhưng chưa xác minh. Vui lòng đợi 5 phút để gửi lại mã OTP.";
             }
 
             Otp otp = new Otp();
             otp.setEmail(email);
             otp.setOtpCode(generateOtp());
             otp.setCreatedAt(LocalDateTime.now());
-            otp.setExpiresAt(LocalDateTime.now().plusMinutes(1));
+            otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
             otp.setUsed(false);
             otpRepo.save(otp);
 
@@ -149,14 +149,14 @@ public class AuthService {
         if (accountOpt.isEmpty()) return "Email không tồn tại trong hệ thống";
 
         if (isOtpRecentlySent(email)) {
-            return "Bạn vừa yêu cầu OTP. Vui lòng đợi 1 phút để gửi lại.";
+            return "Bạn vừa yêu cầu OTP. Vui lòng đợi 5 phút để gửi lại.";
         }
 
         Otp otp = new Otp();
         otp.setEmail(email);
         otp.setOtpCode(generateOtp());
         otp.setCreatedAt(LocalDateTime.now());
-        otp.setExpiresAt(LocalDateTime.now().plusMinutes(1));
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
         otp.setUsed(false);
         otpRepo.save(otp);
 
@@ -188,7 +188,7 @@ public class AuthService {
     private boolean isOtpRecentlySent(String email) {
         Optional<Otp> latestOtpOpt = otpRepo.findTopByEmailOrderByCreatedAtDesc(email);
         return latestOtpOpt
-                .filter(otp -> !otp.isUsed() && otp.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(1)))
+                .filter(otp -> !otp.isUsed() && otp.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(5)))
                 .isPresent();
     }
 
@@ -208,7 +208,7 @@ public class AuthService {
                 + "<h2 style='color: #2e6c80;'>Xác thực tài khoản</h2>"
                 + "<p>Xin chào,</p>"
                 + "<p>Mã OTP của bạn là: <strong style='color: #d9534f; font-size: 20px;'>" + otpCode + "</strong></p>"
-                + "<p>Mã OTP có hiệu lực trong vòng <strong>1 phút</strong>.</p>"
+                + "<p>Mã OTP có hiệu lực trong vòng <strong>5 phút</strong>.</p>"
                 + "<hr>"
                 + "<p style='font-size: 12px; color: gray;'>Đây là email tự động, vui lòng không trả lời email này.</p>"
                 + "</body></html>";

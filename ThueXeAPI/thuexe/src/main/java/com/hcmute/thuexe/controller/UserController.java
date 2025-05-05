@@ -1,25 +1,24 @@
 package com.hcmute.thuexe.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+import com.hcmute.thuexe.dto.request.BookingRequest;
+import com.hcmute.thuexe.dto.request.CancelBookingRequest;
 import com.hcmute.thuexe.dto.request.MessageRequest;
-import com.hcmute.thuexe.dto.response.ConversationResponse;
-import com.hcmute.thuexe.dto.response.MessageResponse;
-import com.hcmute.thuexe.dto.response.UserProfileResponse;
-import com.hcmute.thuexe.dto.response.UserSearchResponse;
-import com.hcmute.thuexe.service.ConversationService;
-import com.hcmute.thuexe.service.MessageService;
-import com.hcmute.thuexe.service.UserService;
+import com.hcmute.thuexe.dto.request.SearchCarRequest;
+import com.hcmute.thuexe.dto.response.*;
+import com.hcmute.thuexe.model.Car;
+import com.hcmute.thuexe.model.User;
+import com.hcmute.thuexe.payload.ApiResponse;
+import com.hcmute.thuexe.service.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -27,6 +26,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CarService carService;
+
+    @Autowired
+    private BookingService bookingService;
 
     @Autowired
     private ConversationService conversationService;
@@ -56,16 +61,13 @@ public class UserController {
     }
 
     /**
-     * API: POST /api/user/messages
+     * API: POST /api/user/message
      * Gửi tin nhắn mới (TEXT hoặc POST)
      */
     @PostMapping("/message")
     public MessageResponse sendMessage(@RequestBody MessageRequest request, Authentication authentication) {
         MessageResponse response = messageService.sendMessage(request, authentication);
-
-        // ✅ Gửi realtime cho tất cả client đang subscribe hội thoại này
         messagingTemplate.convertAndSend("/topic/conversations/" + response.getConversationId(), response);
-
         return response;
     }
 
@@ -87,5 +89,65 @@ public class UserController {
     @GetMapping("/search")
     public List<UserSearchResponse> searchUsers(String keyword, Authentication authentication) {
         return userService.searchUsers(keyword, authentication);
+    }
+
+    /**
+     * API: POST /api/user/cars/list
+     * Tìm kiếm xe theo điều kiện
+     */
+    @PostMapping("/cars/list")
+    public ApiResponse<List<CarListResponse>> searchCars(@RequestBody SearchCarRequest request, Authentication authentication) {
+        List<Car> cars = carService.searchCars(request);
+        if (cars.isEmpty()) {
+            return new ApiResponse<>(false, "Không tìm thấy xe nào");
+        }
+
+        List<CarListResponse> response = cars.stream()
+            .map(car -> {
+                Double avgRating = carService.getAvgRating(car.getCarId());
+                Long tripCount = carService.getTripCount(car.getCarId());
+                return new CarListResponse(car, avgRating != null ? avgRating : 0.0, tripCount != null ? tripCount : 0L);
+            })
+            .toList();
+
+        return new ApiResponse<>(true, "Tìm kiếm thành công", response);
+    }
+
+    /**
+     * API: GET /api/user/car/{id}
+     * Lấy chi tiết xe
+     */
+    @GetMapping("/car/{id}")
+    public ResponseEntity<CarDetailResponse> getCarDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(carService.getCarDetail(id));
+    }
+
+    /**
+     * API: POST /api/user/booking/preview
+     * Xem trước thông tin đặt xe
+     */
+    @PostMapping("/booking/preview")
+    public ResponseEntity<BookingPreviewResponse> preview(@RequestBody BookingRequest request) {
+        return ResponseEntity.ok(bookingService.previewBooking(request));
+    }
+
+    /**
+     * API: POST /api/user/booking/cancel
+     * Hủy đơn đặt xe
+     */
+    @PostMapping("/booking/cancel")
+    public ResponseEntity<String> cancelBooking(@RequestBody CancelBookingRequest request, @AuthenticationPrincipal User user) {
+        bookingService.cancelBooking(request, user.getUserId());
+        return ResponseEntity.ok("Huỷ đơn thành công");
+    }
+
+    /**
+     * API: POST /api/user/booking/confirm
+     * Xác nhận đặt xe
+     */
+    @PostMapping("/booking/confirm")
+    public ResponseEntity<String> confirmBooking(@RequestBody BookingRequest request, @AuthenticationPrincipal User user) {
+        Long bookingId = bookingService.confirmBooking(request, user.getUserId());
+        return ResponseEntity.ok("Đặt xe thành công. ID đơn: " + bookingId);
     }
 }
