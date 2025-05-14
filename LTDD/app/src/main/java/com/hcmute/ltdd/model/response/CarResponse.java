@@ -3,7 +3,7 @@ package com.hcmute.ltdd.model.response;
 import java.util.List;
 
 public class CarResponse {
-    private int carId;
+    private Long carId;
     private String name;
     private String brand;
     private String description;
@@ -18,7 +18,7 @@ public class CarResponse {
 
     public CarResponse() {}
 
-    public CarResponse(int carId, String name, String brand, String description, String gearType, int seats, String fuelType, double energyConsumption, String imageUrl, boolean driverRequired, int numberOfRentals, List<String> features) {
+    public CarResponse(Long carId, String name, String brand, String description, String gearType, int seats, String fuelType, double energyConsumption, String imageUrl, boolean driverRequired, int numberOfRentals, List<String> features) {
         this.carId = carId;
         this.name = name;
         this.brand = brand;
@@ -33,11 +33,11 @@ public class CarResponse {
         this.features = features;
     }
 
-    public int getCarId() {
+    public Long getCarId() {
         return carId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Long carId) {
         this.carId = carId;
     }
 

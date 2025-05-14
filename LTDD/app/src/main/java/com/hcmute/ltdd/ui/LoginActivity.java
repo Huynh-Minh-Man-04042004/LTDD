@@ -70,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
         LoginRequest request = new LoginRequest(username, password);
         Gson gson = new Gson();
         String json = gson.toJson(request);
+        Log.d("LoginRequest", "Request: " + new Gson().toJson(request));
+        Log.d("LoginRequest", "URL: " + apiService.login(request).request().url());
         apiService.login(request).enqueue(new Callback<ApiResponse<String>>() {
             @Override
             public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_white_rounded">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đánh giá"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/edtFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:hint="Nhập nhận xét của bạn"
+        android:padding="8dp"
+        android:background="@drawable/bg_edittext"
+        android:gravity="top"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Gửi"
+        android:layout_marginTop="16dp"
+        android:textSize="18dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/orange_button"
+        android:textColor="@android:color/black"/>
+</LinearLayout>

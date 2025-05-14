@@ -159,7 +159,7 @@ public class BookingActivity extends AppCompatActivity {
             txtRentalPrice.setText(String.format("%.0f VND/ngày", data.getRentalPricePerDay()));
             txtInsuranceFee.setText(String.format("%.0f VND/ngày", data.getInsuranceFeePerDay()));
             txtDeliveryFee.setText(String.format("%.0f VND", data.getDeliveryFee()));
-            txtTotalDays.setText(String.valueOf(data.getTotalDays()));
+            txtTotalDays.setText(String.format("%.1f", data.getTotalDays()));
             txtTotalPrice.setText(String.format("%.0f VND", data.getTotalPrice()));
             txtDriverFee.setText(String.format("%.0f VND", data.getDriverRequired()));
         }

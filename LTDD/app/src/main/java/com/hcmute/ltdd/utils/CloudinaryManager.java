@@ -17,13 +17,23 @@ public class CloudinaryManager {
 
     private static Cloudinary cloudinary;
 
-    public static void init(Context context) {
-        Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", context.getString(R.string.cloud_name));
-        config.put("api_key", context.getString(R.string.api_key));
-        config.put("api_secret", context.getString(R.string.api_secret));
+    private static boolean isInitialized = false;
 
-        MediaManager.init(context, config);
+    public static void init(Context context) {
+        if (!isInitialized) {
+            Map<String, String> config = new HashMap<>();
+            config.put("cloud_name", context.getString(R.string.cloud_name));
+            config.put("api_key", context.getString(R.string.api_key));
+            config.put("api_secret", context.getString(R.string.api_secret));
+
+            try {
+                MediaManager.init(context, config);
+                isInitialized = true;
+                Log.d("CloudinaryManager", "Cloudinary initialized successfully.");
+            } catch (IllegalStateException e) {
+                Log.w("CloudinaryManager", "Cloudinary is already initialized.");
+            }
+        }
     }
 
     public static void uploadImage(Context context, Uri fileUri, UploadCallback callback) {

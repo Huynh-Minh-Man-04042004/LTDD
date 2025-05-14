@@ -29,6 +29,7 @@ public class AuthInterceptor implements Interceptor {
 
         // Kiểm tra URL hiện tại
         String urlPath = originalRequest.url().encodedPath();
+        Log.d("AuthInterceptor", "Request URL: " + originalRequest.url());
 
         // Nếu URL nằm trong danh sách không cần token, bỏ qua
         for (String endpoint : noAuthEndpoints) {

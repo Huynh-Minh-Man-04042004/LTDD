@@ -6,7 +6,7 @@ public class BookingPreviewResponse implements Serializable {
     private double rentalPricePerDay;
     private double insuranceFeePerDay;
     private double deliveryFee;
-    private int totalDays;
+    private double totalDays;
 
     private double totalBeforeDiscount;
     private double discountAmount;
@@ -20,7 +20,7 @@ public class BookingPreviewResponse implements Serializable {
     public BookingPreviewResponse() {
     }
 
-    public BookingPreviewResponse(double rentalPricePerDay, double insuranceFeePerDay, double deliveryFee, int totalDays,
+    public BookingPreviewResponse(double rentalPricePerDay, double insuranceFeePerDay, double deliveryFee, double totalDays,
                                   double totalBeforeDiscount, double discountAmount, double totalPrice, double depositAmount,
                                   double payLaterAmount, double driverRequired, String policyNote) {
         this.rentalPricePerDay = rentalPricePerDay;
@@ -60,11 +60,11 @@ public class BookingPreviewResponse implements Serializable {
         this.deliveryFee = deliveryFee;
     }
 
-    public int getTotalDays() {
+    public double getTotalDays() {
         return totalDays;
     }
 
-    public void setTotalDays(int totalDays) {
+    public void setTotalDays(double totalDays) {
         this.totalDays = totalDays;
     }
 

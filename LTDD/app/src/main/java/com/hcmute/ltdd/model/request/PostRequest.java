@@ -5,13 +5,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class PostRequest {
-    private int carId;
+    private Long carId;
     private double pricePerDay;
     private String  pickupTime;
     private String  dropoffTime;
     private String description;
 
-    public PostRequest(int carId, double pricePerDay, String  pickupTime, String  dropoffTime, String description) {
+    public PostRequest(Long carId, double pricePerDay, String  pickupTime, String  dropoffTime, String description) {
         this.carId = carId;
         this.pricePerDay = pricePerDay;
         this.pickupTime = pickupTime;
@@ -35,11 +35,11 @@ public class PostRequest {
         this.dropoffTime = dropoffTime;
     }
 
-    public int getCarId() {
+    public Long getCarId() {
         return carId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Long carId) {
         this.carId = carId;
     }
 

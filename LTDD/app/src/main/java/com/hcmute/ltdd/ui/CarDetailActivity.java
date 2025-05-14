@@ -224,8 +224,9 @@ public class CarDetailActivity extends AppCompatActivity {
                 layoutTopBar.setBackgroundColor(Color.WHITE);
             } else {
                 // Tạo hiệu ứng trong suốt mượt mà
-                float alpha = (float) scrollY / (float) imageHeight;
-                int colorWithAlpha = ColorUtils.setAlphaComponent(Color.WHITE, (int) (alpha * 255));
+                float alpha = ((float) scrollY / (float) imageHeight)*255;
+                alpha = Math.max(0, Math.min(255, alpha));
+                int colorWithAlpha = ColorUtils.setAlphaComponent(Color.WHITE, (int) alpha);
                 layoutTopBar.setBackgroundColor(colorWithAlpha);
             }
         });

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="3dp"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground">
+
+        <!-- Car Image -->
+        <ImageView
+            android:id="@+id/imgCar_bookingItem"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_image_shadow"/>
+
+        <!-- Content Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Car Name -->
+            <TextView
+                android:id="@+id/tvCarName_bookingitem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên xe"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:textSize="16sp"/>
+
+            <!-- Order Time -->
+            <TextView
+                android:id="@+id/tvOrderTime_bookingitem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10:28, 13 thg 5 2025"
+                android:textColor="#555555"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Total Days -->
+            <TextView
+                android:id="@+id/tvTotalDays_bookingitem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 Ngày"
+                android:textColor="#808080"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- Price -->
+        <TextView
+            android:id="@+id/tvPrice_bookingitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60.500đ"
+            android:textColor="@android:color/holo_orange_light"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

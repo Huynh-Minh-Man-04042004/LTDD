@@ -57,13 +57,7 @@
                 android:textSize="15sp"
                 android:layout_marginTop="4dp" />
 
-            <TextView
-                android:id="@+id/txtPickUpNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(Hôm nay)"
-                android:textColor="#888888"
-                android:textSize="13sp" />
+
         </LinearLayout>
 
         <!-- Trả xe -->

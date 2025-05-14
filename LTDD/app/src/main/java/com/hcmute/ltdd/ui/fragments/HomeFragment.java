@@ -131,9 +131,19 @@ public class HomeFragment extends Fragment {
 
 
     private void bindUserProfile(UserProfileResponse user) {
-        tvUsername.setText(user.getName());
+        String name = user.getName();
+        if (name == null || name.trim().isEmpty()) {
+            tvUsername.setText("Chào bạn");
+        } else {
+            tvUsername.setText(name);
+        }
         tvEmail.setText(user.getEmail());
-        tvLocation.setText(user.getAddress());
+        String location = user.getAddress();
+        if (location == null || location.trim().isEmpty()) {
+            tvLocation.setText("Quận 1");
+        } else {
+            tvLocation.setText(location);
+        }
 
         String imageUrl = user.getImageUrl();
         Glide.with(requireContext())

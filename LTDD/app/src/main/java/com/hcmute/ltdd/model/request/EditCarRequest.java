@@ -1,10 +1,10 @@
 package com.hcmute.ltdd.model.request;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
-public class AddCarRequest {
+public class EditCarRequest {
+
     private String name;
     private String brand;
     private String description;
@@ -17,29 +17,13 @@ public class AddCarRequest {
     private String location;
     private double price;
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     @SerializedName("hasEtc")
     private List<String> features;
 
-    public AddCarRequest(List<String> features, double price, String location,
-                         boolean driverRequired, String imageUrl, double energyConsumption,
-                         String fuelType, int seats, String gearType, String description,
-                         String brand, String name) {
+    public EditCarRequest(List<String> features, double price, String location,
+                          boolean driverRequired, String imageUrl, double energyConsumption,
+                          String fuelType, int seats, String gearType, String description,
+                          String brand, String name) {
         this.features = features;
         this.price = price;
         this.location = location;
@@ -54,12 +38,12 @@ public class AddCarRequest {
         this.name = name;
     }
 
-    public String getBrand() {
-        return brand;
+    public List<String> getFeatures() {
+        return features;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setFeatures(List<String> features) {
+        this.features = features;
     }
 
     public String getName() {
@@ -68,6 +52,14 @@ public class AddCarRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getDescription() {
@@ -102,12 +94,20 @@ public class AddCarRequest {
         this.driverRequired = driverRequired;
     }
 
-    public List<String> getFeatures() {
-        return features;
+    public String getLocation() {
+        return location;
     }
 
-    public void setFeatures(List<String> features) {
-        this.features = features;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getImageUrl() {

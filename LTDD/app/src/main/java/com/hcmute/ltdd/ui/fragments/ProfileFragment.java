@@ -2,6 +2,7 @@ package com.hcmute.ltdd.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.hcmute.ltdd.model.response.UserProfileResponse;
 import com.hcmute.ltdd.ui.AccountActivity;
 import com.hcmute.ltdd.ui.AddCarActivity;
 import com.hcmute.ltdd.ui.PostActivity;
+import com.hcmute.ltdd.ui.EditCarActivity;
 import com.hcmute.ltdd.utils.SharedPrefManager;
 
 import java.util.List;
@@ -128,7 +130,10 @@ public class ProfileFragment extends Fragment {
                     if (apiResponse.isSuccess()) {
                         List<CarResponse> carList = apiResponse.getData();
                         MyCarsAdapter adapter = new MyCarsAdapter(carList, car -> {
-                            Toast.makeText(requireContext(), "Đã chọn xe: " + car.getName(), Toast.LENGTH_SHORT).show();
+                            Log.e("Đã chọn xe có id", "ID: " + car.getCarId());
+                            Intent intent = new Intent(requireContext(), EditCarActivity.class);
+                            intent.putExtra("carId", car.getCarId().longValue()); // Chuyển sang Long
+                            startActivity(intent);
                             dialog.dismiss();
                         });
                         rvMyCars.setAdapter(adapter);

@@ -41,7 +41,7 @@ public class PostActivity extends AppCompatActivity {
     private ImageView ivPickupTime, ivDropoffTime;
     private Button btnPost;
     private ApiService apiService;
-    private int selectedCarId = -1;
+    private Long selectedCarId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
