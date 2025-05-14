@@ -36,12 +36,10 @@ public class AccountActivity extends AppCompatActivity {
 
     private ImageView backButton;
     private TextView tvUsername, tvJoinDate;
+    private ImageView iconBirth, iconGender, iconPhone, modifyButton, iconAddress;
+    private TextView statusBirth, statusGender, statusPhone, statusAddress;
 
-
-    private ImageView iconBirth, iconGender, iconPhone, modifyButton;
-    private TextView statusBirth, statusGender, statusPhone;
-
-    private String valueBirth, valueGender, valuePhone, valueEmail;
+    private String valueBirth, valueGender, valuePhone, valueEmail, valueAddress;
 
     private ApiService apiService;
 
@@ -65,6 +63,9 @@ public class AccountActivity extends AppCompatActivity {
         iconPhone = findViewById(R.id.iconPhone);
         statusPhone = findViewById(R.id.statusPhone);
 
+        iconAddress = findViewById(R.id.iconAddress);
+        statusAddress = findViewById(R.id.statusAddress);
+
         modifyButton = findViewById(R.id.modify);
 
         apiService = RetrofitClient.getRetrofit(this).create(ApiService.class);
@@ -74,7 +75,8 @@ public class AccountActivity extends AppCompatActivity {
         findViewById(R.id.account_Gender).setOnClickListener(v -> showDetailDialog(valueGender, "Chưa liên kết giới tính"));
         findViewById(R.id.account_Phone).setOnClickListener(v -> showDetailDialog(valuePhone, "Chưa liên kết số điện thoại"));
         findViewById(R.id.account_Email).setOnClickListener(v -> showDetailDialog(valueEmail, "Email tạm thời bị lỗi"));
-        findViewById(R.id.modify).setOnClickListener(v -> {showEditProfileDialog(tvUsername.getText().toString(), valuePhone, valueBirth, valueGender);});
+        findViewById(R.id.account_Address).setOnClickListener(v -> showDetailDialog(valueAddress, "Địa chi tạm thời bị lỗi"));
+        findViewById(R.id.modify).setOnClickListener(v -> {showEditProfileDialog(tvUsername.getText().toString(), valuePhone, valueBirth, valueGender, valueAddress);});
     }
 
     private void loadUserProfile() {
@@ -97,9 +99,11 @@ public class AccountActivity extends AppCompatActivity {
                         valueGender = user.getGender();
                         valuePhone = user.getPhone();
                         valueEmail = user.getEmail();
+                        valueAddress = user.getAddress();
                         updateVerification(iconBirth, statusBirth, valueBirth);
                         updateVerification(iconGender, statusGender, valueGender);
                         updateVerification(iconPhone, statusPhone, valuePhone);
+                        updateVerification(iconAddress, statusAddress, valueAddress);
 
                     } else {
                         Toast.makeText(AccountActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -151,7 +155,7 @@ public class AccountActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showEditProfileDialog(String name, String phone, String birthdate, String gender) {
+    private void showEditProfileDialog(String name, String phone, String birthdate, String gender, String address) {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profile, null);
 
@@ -159,31 +163,33 @@ public class AccountActivity extends AppCompatActivity {
         EditText edtPhone = view.findViewById(R.id.edt_phone);
         EditText edtBirthdate = view.findViewById(R.id.edt_birthdate);
         EditText edtGender = view.findViewById(R.id.edt_gender);
+        EditText edtAddress = view.findViewById(R.id.edt_address);
         Button btnSave = view.findViewById(R.id.btn_save);
 
         edtName.setText(name);
         edtPhone.setText(phone);
         edtBirthdate.setText(birthdate);  // Dữ liệu dạng "yyyy-MM-dd"
         edtGender.setText(gender);
+        edtAddress.setText(address);
 
         btnSave.setOnClickListener(v -> {
             String newName = edtName.getText().toString().trim();
             String newPhone = edtPhone.getText().toString().trim();
             String newBirthdate = edtBirthdate.getText().toString().trim();
             String newGender = edtGender.getText().toString().trim();
+            String newAddress = edtAddress.getText().toString().trim();
 
-            if (newName.isEmpty() || newPhone.isEmpty() || newBirthdate.isEmpty()) {
+            if (newName.isEmpty() || newPhone.isEmpty() || newBirthdate.isEmpty() || newAddress.isEmpty()) {
                 Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Kiểm tra định dạng ngày sinh
             if (!newBirthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
                 Toast.makeText(this, "Ngày sinh phải có định dạng yyyy-MM-dd", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            EditProfileRequest request = new EditProfileRequest(newName, newPhone, newBirthdate, newGender);
+            EditProfileRequest request = new EditProfileRequest(newName, newPhone, newBirthdate, newGender, newAddress);
             updateProfile(request);
             dialog.dismiss();
         });
