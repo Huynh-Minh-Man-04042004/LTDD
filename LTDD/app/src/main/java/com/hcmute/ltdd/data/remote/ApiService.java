@@ -29,6 +29,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
@@ -124,4 +125,11 @@ public interface ApiService {
 
     @PUT("/api/user/edit-car/{carId}")
     Call<ApiResponse<String>> updateCar(@Path("carId") Long carId, @Body EditCarRequest request);
+
+    @PUT("/api/user/review/update/{reviewId}")
+    Call<ApiResponse<String>> updateReview(@Path("reviewId") long reviewId, @Body ReviewRequest request);
+
+    @DELETE("/api/user/review/delete/{reviewId}")
+    Call<ApiResponse<String>> deleteReview(@Path("reviewId") long reviewId);
+
 }

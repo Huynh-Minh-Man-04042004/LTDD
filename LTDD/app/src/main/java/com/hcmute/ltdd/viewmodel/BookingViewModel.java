@@ -84,7 +84,6 @@ public class BookingViewModel extends ViewModel {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<String> apiResponse = response.body();
                     if (apiResponse.isSuccess()) {
-                        Toast.makeText(context, "Cập nhật trạng thái thành công", Toast.LENGTH_SHORT).show();
                     } else {
                         errorMessage.setValue("Lỗi: " + apiResponse.getMessage());
                     }
@@ -118,5 +117,48 @@ public class BookingViewModel extends ViewModel {
             }
         });
     }
+
+    public void updateReview(Context context, long reviewId, int rating, String comment) {
+        ReviewRequest request = new ReviewRequest(rating, comment);
+        ApiService apiService = RetrofitClient.getRetrofit(context).create(ApiService.class);
+
+        apiService.updateReview(reviewId, request).enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(context, "Đánh giá đã được cập nhật", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Lỗi khi cập nhật đánh giá", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                Toast.makeText(context, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void deleteReview(Context context, long reviewId, long bookingId) {
+        ApiService apiService = RetrofitClient.getRetrofit(context).create(ApiService.class);
+
+        apiService.deleteReview(reviewId).enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    updateBookingStatus(context, bookingId, "Completed", null);
+                    Toast.makeText(context, "Đánh giá đã được xóa", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Lỗi khi xóa đánh giá", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                Toast.makeText(context, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

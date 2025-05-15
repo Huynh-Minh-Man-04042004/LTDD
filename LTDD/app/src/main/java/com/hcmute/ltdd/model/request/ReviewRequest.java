@@ -12,6 +12,10 @@ public class ReviewRequest {
         this.rating = rating;
         this.comment = comment;
     }
+    public ReviewRequest(Integer rating, String comment) {
+        this.rating = rating;
+        this.comment = comment;
+    }
 
     public int getCarId() {
         return carId;

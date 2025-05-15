@@ -8,6 +8,7 @@
     android:background="@drawable/bg_white_rounded">
 
     <TextView
+        android:id="@+id/tvEditReview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Đánh giá"
@@ -21,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
+        android:progressTint="@color/holo_light_orange"
         android:stepSize="1"
         android:layout_marginTop="16dp"
         android:layout_gravity="center"/>

@@ -2,6 +2,7 @@ package com.hcmute.ltdd.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -195,31 +197,110 @@ public class BookingDetailActivity extends AppCompatActivity {
             TextView tvContent = reviewView.findViewById(R.id.tvContent);
             TextView tvStar = reviewView.findViewById(R.id.tvStarr);
             ImageView imgAvatar = reviewView.findViewById(R.id.imgAvatar);
-
+            ImageView btnEditReview = reviewView.findViewById(R.id.btnEditReview);
+            ImageView btnDeleteReview = reviewView.findViewById(R.id.btnDeleteReview);
+            Log.d("abc", "Reviewid: " + review.getReviewId());
             tvName.setText(review.getName());
             tvDate.setText(review.getCreatedAt());
             tvContent.setText(review.getComment());
             tvStar.setText("★ " + review.getRating());
-
             Glide.with(this).load(review.getImageUrl()).into(imgAvatar);
+
+            if ("trips".equals(role)) {
+                btnEditReview.setVisibility(View.VISIBLE);
+                btnDeleteReview.setVisibility(View.VISIBLE);
+            }
+
+            btnEditReview.setOnClickListener(v -> openEditReviewDialog(review));
+            btnDeleteReview.setOnClickListener(v -> confirmDeleteReview(review.getReviewId(), detail.getBookingId()));
+
 
             reviewContainer.addView(reviewView);
         }
     }
+    private void openEditReviewDialog(ReviewDTO review) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.fragment_rating, null);
+        builder.setView(view);
+        TextView tvEditReview = view.findViewById(R.id.tvEditReview);
+        EditText edtFeedback = view.findViewById(R.id.edtFeedback);
+        RatingBar ratingBar = view.findViewById(R.id.ratingBar);
+        Button btnSubmit = view.findViewById(R.id.btnSubmit);
+        tvEditReview.setText("Sửa đánh giá");
+        edtFeedback.setText(review.getComment());
+        ratingBar.setRating((float)review.getRating());
+
+        AlertDialog dialog = builder.create();
+
+        btnSubmit.setOnClickListener(v -> {
+            String updatedComment = edtFeedback.getText().toString().trim();
+            int updatedRating = (int) ratingBar.getRating();
+
+            bookingViewModel.updateReview(this, review.getReviewId(), updatedRating, updatedComment);
+            dialog.dismiss();
+            loadBookingDetail();
+        });
+
+        dialog.show();
+    }
+
+    private void confirmDeleteReview(long reviewId, Long bookingId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null);
+        builder.setView(view);
+
+        Button btnCancelDelete = view.findViewById(R.id.btnCancelDelete);
+        Button btnConfirmDelete = view.findViewById(R.id.btnConfirmDelete);
+
+        // Cập nhật giao diện cho nút
+        btnCancelDelete.setBackgroundResource(R.drawable.button_primary);
+        btnConfirmDelete.setBackgroundResource(R.drawable.button_primary);
+
+        AlertDialog dialog = builder.create();
+
+        btnCancelDelete.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirmDelete.setOnClickListener(v -> {
+            bookingViewModel.deleteReview(this, reviewId, bookingId);
+            dialog.dismiss();
+            loadBookingDetail();
+        });
+
+        dialog.show();
+    }
+
 
     private void showCancelDialog(String status) {
-        new AlertDialog.Builder(this)
-                .setTitle("Nhập lý do hủy")
-                .setView(R.layout.dialog_cancel_reason)
-                .setPositiveButton("Gửi", (dialog, which) -> {
-                    EditText edtReason = ((AlertDialog) dialog).findViewById(R.id.edtCancelReason);
-                    String reason = edtReason.getText().toString().trim();
-                    bookingViewModel.updateBookingStatus(this, bookingId, status, reason);
-                    loadBookingDetail();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_reason, null);
+        builder.setView(view);
+
+        EditText edtCancelReason = view.findViewById(R.id.edtCancelReason);
+        Button btnCancelReason = view.findViewById(R.id.btnCancelReason);
+        Button btnSubmitReason = view.findViewById(R.id.btnSubmitReason);
+
+        btnCancelReason.setBackgroundResource(R.drawable.button_primary);
+        btnSubmitReason.setBackgroundResource(R.drawable.button_primary);
+
+        AlertDialog dialog = builder.create();
+
+        btnCancelReason.setOnClickListener(v -> dialog.dismiss());
+
+        btnSubmitReason.setOnClickListener(v -> {
+            String reason = edtCancelReason.getText().toString().trim();
+            if (reason.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập lý do hủy", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            bookingViewModel.updateBookingStatus(this, bookingId, status, reason);
+            dialog.dismiss();
+            loadBookingDetail();
+        });
+
+        dialog.show();
     }
+
 
     private void openReviewFragment(int carId, long bookingId) {
         ReviewFragment reviewFragment = new ReviewFragment(carId, bookingId, new ReviewFragment.ReviewCallback() {

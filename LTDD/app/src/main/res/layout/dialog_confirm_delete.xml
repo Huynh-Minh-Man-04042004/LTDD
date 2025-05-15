@@ -7,14 +7,15 @@
     android:padding="16dp"
     android:background="@drawable/bg_card">
 
-    <EditText
-        android:id="@+id/edtCancelReason"
+    <TextView
+        android:id="@+id/tvDeleteMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập lý do hủy"
-        android:padding="12dp"
-        android:background="@drawable/bg_edittext"
-        android:layout_marginBottom="12dp"/>
+        android:text="Bạn có chắc chắn muốn xóa đánh giá này không?"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,26 +25,26 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/btnCancelReason"
+            android:id="@+id/btnCancelDelete"
             android:layout_width="0dp"
-            app:backgroundTint="@null"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/holo_light_orange"
             android:text="Hủy"
+            android:textColor="@color/black"
+            app:backgroundTint="@null"
+            android:background="@drawable/button_primary"
             android:layout_marginEnd="8dp"
             android:textAllCaps="false"/>
 
         <Button
-            android:id="@+id/btnSubmitReason"
+            android:id="@+id/btnConfirmDelete"
             android:layout_width="0dp"
             android:layout_weight="1"
-            app:backgroundTint="@null"
             android:textColor="@color/black"
-            android:backgroundTint="@color/holo_light_orange"
+            app:backgroundTint="@null"
+            android:background="@drawable/button_primary"
             android:layout_height="wrap_content"
-            android:text="Gửi"
+            android:text="Xóa"
             android:textAllCaps="false"/>
     </LinearLayout>
 </LinearLayout>

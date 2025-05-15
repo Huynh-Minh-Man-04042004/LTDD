@@ -41,8 +41,12 @@ public class FilterBottomSheet extends BottomSheetDialogFragment {
         binding.btnApply.setOnClickListener(v -> {
             String brand = getSelectedSafe(binding.spinnerBrand.getSelectedItem());
             Integer seats = parseIntSafe(getSelectedSafe(binding.spinnerSeats.getSelectedItem()));
-            String gearType = getSelectedSafe(binding.spinnerGearType.getSelectedItem());
-            String fuelType = getSelectedSafe(binding.spinnerFuelType.getSelectedItem());
+
+            String gearTypeVi = getSelectedSafe(binding.spinnerGearType.getSelectedItem());
+            String fuelTypeVi = getSelectedSafe(binding.spinnerFuelType.getSelectedItem());
+            String gearType = convertGearTypeToEnglish(gearTypeVi);
+            String fuelType = convertFuelTypeToEnglish(fuelTypeVi);
+
             Double priceFrom = parseDoubleSafe(toStringSafe(binding.etPriceFrom.getText()));
             Double priceTo = parseDoubleSafe(toStringSafe(binding.etPriceTo.getText()));
 
@@ -107,4 +111,23 @@ public class FilterBottomSheet extends BottomSheetDialogFragment {
         fuelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerFuelType.setAdapter(fuelAdapter);
     }
+    private String convertGearTypeToEnglish(String vietnamese) {
+        if (vietnamese == null) return null;
+        switch (vietnamese) {
+            case "Số sàn": return "Manual";
+            case "Số tự động": return "Automatic";
+            default: return null;
+        }
+    }
+
+    private String convertFuelTypeToEnglish(String vietnamese) {
+        if (vietnamese == null) return null;
+        switch (vietnamese) {
+            case "Xăng": return "Gasoline";
+            case "Dầu Diesel": return "Diesel";
+            case "Điện": return "Electric";
+            default: return null;
+        }
+    }
+
 }
